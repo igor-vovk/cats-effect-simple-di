@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -23,3 +27,5 @@ jobs:
 
       - name: Run tests
         run: sbt test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUBLISH }}
