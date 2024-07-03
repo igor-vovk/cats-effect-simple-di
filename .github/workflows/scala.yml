@@ -19,6 +19,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+          cache: 'sbt'
 
       - name: Run tests
         run: sbt test

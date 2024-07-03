@@ -1,4 +1,4 @@
-package com.ihorvovk.cats_effect_simple_di
+package io.github.cats_effect_simple_di
 
 import cats.Show
 import cats.effect.unsafe.IORuntime

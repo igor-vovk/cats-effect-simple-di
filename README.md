@@ -12,7 +12,7 @@ grows.
 The suggested approach would be:
 
 ```scala
-import com.ihorvovk.cats_effect_simple_di.Allocator
+import io.github.cats_effect_simple_di.Allocator
 
 // create a Dependencies object:
 class Dependencies(allocator: Allocator) {
@@ -58,7 +58,83 @@ If you want to see the order of initialization and finalization of resources, us
 creating an `Allocator` object. This will log the allocation and finalization of resources in the order they happen:
 
 ```scala
-import com.ihorvovk.cats_effect_simple_di.AllocationLifecycleListener
+import io.github.cats_effect_simple_di.AllocationLifecycleListener
 
 Allocator.create(runtime, LogbackAllocationListener)
+```
+
+## Modularization
+
+You can have multiple dependencies objects and combine them together. In this case, you can either reuse the same
+`Allocator` object or create a new one for each dependency object, but wrap their instantiation
+in `allocator.allocate{}` so that they are shut down in the right order:
+
+Example reusing the same `Allocator` object:
+```scala
+// AWS - specific dependencies
+class AwsDependencies(allocator: Allocator) {
+  lazy val s3Client: S3Client = allocator.allocate {
+    S3ClientBuilder.default.build
+  }
+}
+
+// Main application dependencies
+object Dependencies {
+  def create(runtime: IORuntime): Resource[IO, Dependencies] =
+    Allocator.create(runtime).map(new Dependencies(_))
+}
+
+class Dependencies(allocator: Allocator) {
+  val aws = new AwsDependencies(allocator)
+
+  lazy val http4sClient: Client[IO] = allocator.allocate {
+    EmberClientBuilder.default[IO].build
+  }
+}
+
+object App extends IOApp.Simple {
+  override def run: IO[Unit] = Dependencies.create(runtime).use { deps =>
+    // use aws.s3Client here
+    deps.aws.s3Client
+  }
+}
+```
+
+Example creating a new `Allocator` object for each Dependencies object:
+
+```scala
+// AWS - specific dependencies
+object AwsDependencies {
+  def create(runtime: IORuntime): Resource[IO, AwsDependencies] =
+    Allocator.create(runtime).map(new AwsDependencies(_))
+}
+
+class AwsDependencies(allocator: Allocator) {
+  lazy val s3Client: S3Client = allocator.allocate {
+    S3ClientBuilder.default.build
+  }
+}
+
+// Main application dependencies
+object Dependencies {
+  def create(runtime: IORuntime): Resource[IO, Dependencies] =
+    Allocator.create(runtime).map(new Dependencies(_))
+}
+
+class Dependencies(allocator: Allocator) {
+  lazy val aws = allocator.allocate {
+    AwsDependencies.create(IORuntime.global)
+  }
+
+  lazy val http4sClient: Client[IO] = http4sAllocator.allocate {
+    EmberClientBuilder.default[IO].build
+  }
+}
+
+object App extends IOApp.Simple {
+  override def run: IO[Unit] = Dependencies.create(runtime).use { deps =>
+    // use aws.s3Client here
+    deps.aws.s3Client
+  }
+}
 ```
