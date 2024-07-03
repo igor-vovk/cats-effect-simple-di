@@ -12,11 +12,9 @@ grows.
 The suggested approach would be:
 
 ```scala
-// create a Dependencies object:
-
 import com.ihorvovk.cats_effect_simple_di.Allocator
 
-
+// create a Dependencies object:
 class Dependencies(allocator: Allocator) {
   // Suppose you need to instantiate a class that returns a Resource[F, A]
   // Then you can use the allocator to allocate the resource
@@ -40,7 +38,7 @@ class Dependencies(allocator: Allocator) {
 // Then you can use the Dependencies object to create a Resource[F, A]
 object Dependencies {
   def apply(runtime: IORuntime): Resource[IO, Dependencies] =
-    Allocator(runtime).map(new Dependencies(_))
+    Allocator.create(runtime).map(new Dependencies(_))
 }
 
 // Use your dependencies in the main app class
@@ -52,4 +50,15 @@ object Main extends IOApp.Simple {
     }
   }
 }
+```
+
+## Debugging allocation order
+
+If you want to see the order of initialization and finalization of resources, use `LogbackAllocationListener` when
+creating an `Allocator` object. This will log the allocation and finalization of resources in the order they happen:
+
+```scala
+import com.ihorvovk.cats_effect_simple_di.AllocationLifecycleListener
+
+Allocator.create(runtime, LogbackAllocationListener)
 ```
