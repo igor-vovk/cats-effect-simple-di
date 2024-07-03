@@ -14,8 +14,13 @@ The suggested approach with this library would be:
 ```scala
 import io.github.cats_effect_simple_di.Allocator
 
-// create a Dependencies object:
-class Dependencies(allocator: Allocator) {
+// create a Dependencies object and class that holds all the dependencies:
+object Dependencies {
+  def create(runtime: IORuntime): Resource[IO, Dependencies] =
+    Allocator.create(runtime).map(new Dependencies(_))
+}
+
+class Dependencies private(allocator: Allocator) {
   // Suppose you need to instantiate a class that returns a Resource[F, A]
   // Then you can use the allocator to allocate the resource
   lazy val http4sClient: Client[IO] = allocator.allocate {
@@ -35,22 +40,24 @@ class Dependencies(allocator: Allocator) {
 
 }
 
-// Then you can use the Dependencies object to create a Resource[F, A]
-object Dependencies {
-  def apply(runtime: IORuntime): Resource[IO, Dependencies] =
-    Allocator.create(runtime).map(new Dependencies(_))
-}
-
 // Use your dependencies in the main app class
 object Main extends IOApp.Simple {
-  override def run: IO[Unit] = {
-    Dependencies(runtime).use { dependencies =>
+  override def run: IO[Unit] = 
+    Dependencies.create(runtime).use { dependencies =>
       // use your exit dependency here
       dependencies.myServer.useForever
     }
-  }
 }
 ```
+
+## What happens under the hood?
+
+* `lazy val` solves the problem that dependencies are instantiated only when they are accessed and only one instance is
+  created.
+* `Allocator` is a wrapper around `Resource` that keeps track of the order of resource allocation and finalization. So
+  when application is shut down, resources are shut down in the reverse order they were initialized.
+* `Dependencies` initialization is wrapped in a `Resource` so that resources are shut down when the application
+  finishes.
 
 ## Installation
 
