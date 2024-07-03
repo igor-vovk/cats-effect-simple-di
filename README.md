@@ -5,7 +5,7 @@ This is a follow-up of
 the [article](https://medium.com/@ivovk/dependency-injection-with-cats-effect-resource-monad-ad7cd47b977) I wrote about
 the topic.
 
-Traditional approach to dependency enjection with cats-effect is to build a single for-comprehension that wires all the
+Traditional approach to dependency injection with cats-effect is to build a single for-comprehension that wires all the
 dependencies together. This approach is not very scalable and can become quite messy as the number of dependencies
 grows.
 
@@ -50,6 +50,18 @@ object Main extends IOApp.Simple {
     }
   }
 }
+```
+
+## Installation
+
+Supported Scala versions: `3.x`
+
+To install add the following to your `build.sbt`:
+
+```scala
+resolvers += "GitHub Package Registry (igor-vovk)" at "https://maven.pkg.github.com/igor-vovk/_"
+
+libraryDependencies += "io.github.ivovk" %% "cats-effect-simple-di" % "{latest_version}"
 ```
 
 ## Debugging allocation order
