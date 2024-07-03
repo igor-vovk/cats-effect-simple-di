@@ -1,3 +1,5 @@
+import xerial.sbt.Sonatype.sonatypeCentralHost
+
 name := "cats-effect-simple-di"
 
 scalaVersion := "3.3.3"
@@ -16,6 +18,8 @@ inThisBuild(List(
     )
   )
 ))
+
+ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 
 lazy val Versions = new {
   val catsEffect = "3.5.4"
