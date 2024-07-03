@@ -1,15 +1,15 @@
 # Cats-Effect-Simple-DI
 
-A tiny library that allows you to make simple dependency injection with Cats Effect.
+A tiny library that makes dependency injection with [cats-effect](https://github.com/typelevel/cats-effect) simple.
 This is a follow-up of
 the [article](https://medium.com/@ivovk/dependency-injection-with-cats-effect-resource-monad-ad7cd47b977) I wrote about
 the topic.
 
-Traditional approach to Dependency Injection with Cats Effect is to build a single for-comprehension that wires all the
+Traditional approach to dependency enjection with cats-effect is to build a single for-comprehension that wires all the
 dependencies together. This approach is not very scalable and can become quite messy as the number of dependencies
 grows.
 
-The suggested approach would be:
+The suggested approach with this library would be:
 
 ```scala
 import io.github.cats_effect_simple_di.Allocator
@@ -70,6 +70,7 @@ You can have multiple dependencies objects and combine them together. In this ca
 in `allocator.allocate{}` so that they are shut down in the right order:
 
 Example reusing the same `Allocator` object:
+
 ```scala
 // AWS - specific dependencies
 class AwsDependencies(allocator: Allocator) {
