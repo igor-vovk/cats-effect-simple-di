@@ -10,8 +10,10 @@ class AllocatorTest extends AnyFlatSpec {
 
   trait ctx {
     object TestDependencies {
-      def apply(runtime: IORuntime): Resource[IO, TestDependencies] =
-        Allocator(runtime).map(new TestDependencies(_))
+      def apply(runtime: IORuntime): Resource[IO, TestDependencies] = {
+        Allocator.create(runtime, LogbackAllocationListener)
+          .map(new TestDependencies(_))
+      }
 
       val shutdownOrderCapturer: Ref[IO, Seq[String]] = Ref.unsafe(Seq.empty)
     }
