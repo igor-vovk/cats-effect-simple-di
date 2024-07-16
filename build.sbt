@@ -16,10 +16,6 @@ developers := List(
   )
 )
 
-
-githubOwner := "igor-vovk"
-githubRepository := "cats-effect-simple-di"
-
 lazy val Versions = new {
   val catsEffect = "3.5.4"
   val scalatest  = "3.2.18"
