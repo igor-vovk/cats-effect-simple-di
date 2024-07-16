@@ -1,4 +1,4 @@
-# Cats-Effect-Simple-DI
+# Simple Dependency Injection for Cats-Effect
 
 A tiny library that makes dependency injection with [cats-effect](https://github.com/typelevel/cats-effect) simple.
 This is a follow-up of
