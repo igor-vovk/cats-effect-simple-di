@@ -1,10 +1,8 @@
 import xerial.sbt.Sonatype.sonatypeCentralHost
 
 ThisBuild / scalaVersion := "3.3.3"
-ThisBuild / scalacOptions ++= Seq("-unchecked", "-feature", "-deprecation", "-Xfatal-warnings", "-Wunused:imports")
 
 ThisBuild / organization := "io.github.igor-vovk"
-ThisBuild / versionScheme := Some("early-semver")
 
 ThisBuild / homepage := Some(url("https://github.com/igor-vovk/cats-effect-simple-di"))
 ThisBuild / licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
@@ -18,9 +16,14 @@ ThisBuild / developers := List(
 )
 ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 
-publish / skip := true // do not publish the root project
+lazy val noPublish = List(
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false,
+  publish / skip := true
+)
 
-lazy val simple_di = (project in file("."))
+lazy val core = (project in file("."))
   .settings(
     moduleName := "cats-effect-simple-di",
 
@@ -32,4 +35,12 @@ lazy val simple_di = (project in file("."))
 
       "org.scalatest" %% "scalatest" % "3.2.18" % Test,
     )
+  )
+
+lazy val root = (project)
+  .aggregate(
+    core
+  )
+  .settings(
+    noPublish
   )
