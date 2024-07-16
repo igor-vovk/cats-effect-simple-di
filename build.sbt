@@ -3,8 +3,6 @@ import xerial.sbt.Sonatype.sonatypeCentralHost
 ThisBuild / scalaVersion := "3.3.3"
 ThisBuild / scalacOptions ++= Seq("-unchecked", "-feature", "-deprecation", "-Xfatal-warnings", "-Wunused:imports")
 
-name := "cats-effect-simple-di"
-
 ThisBuild / organization := "io.github.igor-vovk"
 ThisBuild / versionScheme := Some("early-semver")
 
@@ -19,14 +17,19 @@ ThisBuild / developers := List(
   )
 )
 ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
-sonatypeRepository := sonatypeCentralHost
 
+publish / skip := true // do not publish the root project
 
-libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-effect" % "3.5.4" % "provided",
+lazy val simple_di = (project in file("."))
+  .settings(
+    moduleName := "cats-effect-simple-di",
 
-  "org.typelevel" %% "log4cats-slf4j" % "2.7.0" % "provided",
-  "ch.qos.logback" % "logback-classic" % "1.5.6" % "provided",
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-effect" % "3.5.4" % "provided",
 
-  "org.scalatest" %% "scalatest" % "3.2.18" % Test,
-)
+      "org.typelevel" %% "log4cats-slf4j" % "2.7.0" % "provided",
+      "ch.qos.logback" % "logback-classic" % "1.5.6" % "provided",
+
+      "org.scalatest" %% "scalatest" % "3.2.18" % Test,
+    )
+  )
