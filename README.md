@@ -66,9 +66,10 @@ Supported Scala versions: `3.x`
 To install add the following to your `build.sbt`:
 
 ```scala
-resolvers += "GitHub Package Registry (igor-vovk)" at "https://maven.pkg.github.com/igor-vovk/_"
-
-libraryDependencies += "io.github.igor-vovk" %% "cats-effect-simple-di" % "{latest_version}"
+libraryDependencies ++= Seq(
+  "org.typelevel" %% "cats-effect" % Versions.catsEffect,
+  "io.github.igor-vovk" %% "cats-effect-simple-di" % Versions.simpleDi,
+)
 ```
 
 ## Debugging allocation order
