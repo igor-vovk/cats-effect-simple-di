@@ -5,6 +5,18 @@ organization := "io.github.igor-vovk"
 name := "cats-effect-simple-di"
 versionScheme := Some("early-semver")
 
+homepage := Some(url("https://github.com/igor-vovk/cats-effect-simple-di"))
+licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+developers := List(
+  Developer(
+    "igor-vovk",
+    "Ihor Vovk",
+    "ideals-03.gushing@icloud.com",
+    url("https://ivovk.me")
+  )
+)
+
+
 githubOwner := "igor-vovk"
 githubRepository := "cats-effect-simple-di"
 
