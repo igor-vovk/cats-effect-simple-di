@@ -23,8 +23,6 @@ jobs:
 
       - name: Run tests
         run: sbt test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_PUBLISH }}
 
       - run: sbt ci-release
         env:
