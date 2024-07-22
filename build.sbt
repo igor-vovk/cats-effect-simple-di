@@ -33,7 +33,7 @@ lazy val core = (project in file("."))
       "org.typelevel" %% "log4cats-slf4j" % "2.7.0" % "provided",
       "ch.qos.logback" % "logback-classic" % "1.5.6" % "provided",
 
-      "org.scalatest" %% "scalatest" % "3.2.18" % Test,
+      "org.scalatest" %% "scalatest" % "3.2.19" % Test,
     )
   )
 
