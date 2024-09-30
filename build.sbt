@@ -1,6 +1,6 @@
 import xerial.sbt.Sonatype.sonatypeCentralHost
 
-ThisBuild / scalaVersion := "3.3.3"
+ThisBuild / scalaVersion := "3.3.4"
 
 ThisBuild / organization := "io.github.igor-vovk"
 
