@@ -28,7 +28,7 @@ lazy val core = (project in file("."))
     moduleName := "cats-effect-simple-di",
 
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % "3.5.4" % "provided",
+      "org.typelevel" %% "cats-effect" % "3.5.5" % "provided",
 
       "org.typelevel" %% "log4cats-slf4j" % "2.7.0" % "provided",
       "ch.qos.logback" % "logback-classic" % "1.5.12" % "provided",
