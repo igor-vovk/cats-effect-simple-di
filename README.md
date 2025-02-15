@@ -16,11 +16,11 @@ import io.github.cats_effect_simple_di.Allocator
 
 // create a Dependencies object and class that holds all the dependencies:
 object Dependencies {
-  def create(runtime: IORuntime): Resource[IO, Dependencies] =
-    Allocator.create(runtime).map(new Dependencies(_))
+  def create(): Resource[IO, Dependencies] =
+    Allocator.create().map(new Dependencies(_))
 }
 
-class Dependencies private(allocator: Allocator) {
+class Dependencies private(allocator: Allocator[IO]) {
   // Suppose you need to instantiate a class that returns a Resource[F, A]
   // Then you can use the allocator to allocate the resource
   lazy val http4sClient: Client[IO] = allocator.allocate {
@@ -43,7 +43,7 @@ class Dependencies private(allocator: Allocator) {
 // Use your dependencies in the main app class
 object Main extends IOApp.Simple {
   override def run: IO[Unit] =
-    Dependencies.create(runtime).use { dependencies =>
+    Dependencies.create().use { dependencies =>
       // use your exit dependency here
       dependencies.myServer.useForever
     }
