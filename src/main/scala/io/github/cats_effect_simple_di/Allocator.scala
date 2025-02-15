@@ -1,6 +1,5 @@
 package io.github.cats_effect_simple_di
 
-import cats.Show
 import cats.effect.unsafe.IORuntime
 import cats.effect.{IO, Ref, Resource}
 
@@ -11,12 +10,11 @@ object Allocator {
   def create(
     runtime: IORuntime,
     listener: AllocationLifecycleListener = NoOpListener,
-  ): Resource[IO, Allocator] =
-    Resource.make {
-      IO(unsafeCreate(runtime, listener))
-    } {
-      _.shutdownAll
-    }
+  ): Resource[IO, Allocator] = {
+    val acquire = IO(unsafeCreate(runtime, listener))
+    val release = (a: Allocator) => a.shutdownAll
+    Resource.make(acquire)(release)
+  }
 
   /**
    * When using this method you must call [[shutdownAll]] manually after you finished working with dependencies.
@@ -26,8 +24,6 @@ object Allocator {
     listener: AllocationLifecycleListener = NoOpListener,
   ): Allocator =
     new Allocator(runtime, listener)
-
-  implicit def showFromToString[A]: Show[A] = Show.fromToString[A]
 
 }
 
