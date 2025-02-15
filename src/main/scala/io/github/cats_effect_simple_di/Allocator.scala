@@ -15,7 +15,7 @@ object Allocator {
       dispatcher  <- Dispatcher.parallel[F]
       shutdownRef <- Ref.of(Async[F].unit).toResource
       allocator <- {
-        val acquire = Async[F].delay(new Allocator(dispatcher, shutdownRef, new NoOpListener[F]))
+        val acquire = Async[F].delay(Allocator(dispatcher, shutdownRef, NoOpListener[F]))
         val release = (a: Allocator[F]) => a.shutdownAll
 
         Resource.make(acquire)(release)
@@ -46,7 +46,7 @@ class Allocator[F[_]: Sync] private (
         .allocated
         .flatMap { (acquired, release) =>
           listener.onInit(acquired) *>
-            shutdown.update(a => listener.onShutdown(a) *> release *> a) *>
+            shutdown.update(listener.onShutdown(acquired) *> release *> _) *>
             // Shutdown this resource, and after shutdown all previous
             Sync[F].pure(acquired)
         }
