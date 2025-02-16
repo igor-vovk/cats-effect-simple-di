@@ -27,9 +27,9 @@ lazy val catsEffectSimpleDiCore = (project in file("."))
   .settings(
     moduleName := "cats-effect-simple-di",
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect"     % "3.5.7"  % "provided",
-      "org.typelevel" %% "log4cats-slf4j"  % "2.7.0"  % "provided",
-      "ch.qos.logback" % "logback-classic" % "1.5.16" % "provided",
+      "org.typelevel" %% "cats-effect"     % "3.5.7"  % Provided,
+      "org.typelevel" %% "log4cats-slf4j"  % "2.7.0"  % Provided,
+      "ch.qos.logback" % "logback-classic" % "1.5.16" % Provided,
       "org.scalatest" %% "scalatest"       % "3.2.19" % Test,
     ),
   )

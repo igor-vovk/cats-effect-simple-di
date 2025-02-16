@@ -88,14 +88,14 @@ creating an `Allocator` object. This will log the allocation and finalization of
 ```scala
 import io.github.cats_effect_simple_di.AllocationLifecycleListener
 
-Allocator.create(runtime, LogbackAllocationListener)
+Allocator.create[IO]().withListener(new LogbackAllocationListener[IO])
 ```
 
 ## Modularization
 
 You can have multiple dependencies objects and combine them together. In this case, you can either reuse the same
 `Allocator` object or create a new one for each dependency object, but wrap their instantiation
-in `allocator.allocate{}` so that they are shut down in the right order:
+in `allocator.allocate { ... }` so that they are shut down in the right order:
 
 Example reusing the same `Allocator` object:
 
@@ -109,8 +109,8 @@ class AwsDependencies(allocator: Allocator) {
 
 // Main application dependencies
 object Dependencies {
-  def create(runtime: IORuntime): Resource[IO, Dependencies] =
-    Allocator.create(runtime).map(new Dependencies(_))
+  def create(): Resource[IO, Dependencies] =
+    Allocator.create[IO]().map(new Dependencies(_))
 }
 
 class Dependencies(allocator: Allocator) {
@@ -122,20 +122,20 @@ class Dependencies(allocator: Allocator) {
 }
 
 object App extends IOApp.Simple {
-  override def run: IO[Unit] = Dependencies.create(runtime).use { deps =>
+  override def run: IO[Unit] = Dependencies.create().use { deps =>
     // use aws.s3Client here
     deps.aws.s3Client
   }
 }
 ```
 
-Example creating a new `Allocator` object for each Dependencies object:
+Example creating a new `Allocator` object for each `Dependencies` object:
 
 ```scala
 // AWS - specific dependencies
 object AwsDependencies {
-  def create(runtime: IORuntime): Resource[IO, AwsDependencies] =
-    Allocator.create(runtime).map(new AwsDependencies(_))
+  def create(): Resource[IO, AwsDependencies] =
+    Allocator.create[IO]().map(new AwsDependencies(_))
 }
 
 class AwsDependencies(allocator: Allocator) {
@@ -146,13 +146,13 @@ class AwsDependencies(allocator: Allocator) {
 
 // Main application dependencies
 object Dependencies {
-  def create(runtime: IORuntime): Resource[IO, Dependencies] =
-    Allocator.create(runtime).map(new Dependencies(_))
+  def create(): Resource[IO, Dependencies] =
+    Allocator.create[IO]().map(new Dependencies(_))
 }
 
-class Dependencies(allocator: Allocator) {
+class Dependencies(allocator: Allocator[IO]) {
   lazy val aws = allocator.allocate {
-    AwsDependencies.create(IORuntime.global)
+    AwsDependencies.create()
   }
 
   lazy val http4sClient: Client[IO] = http4sAllocator.allocate {
@@ -161,7 +161,7 @@ class Dependencies(allocator: Allocator) {
 }
 
 object App extends IOApp.Simple {
-  override def run: IO[Unit] = Dependencies.create(runtime).use { deps =>
+  override def run: IO[Unit] = Dependencies.create().use { deps =>
     // use aws.s3Client here
     deps.aws.s3Client
   }
