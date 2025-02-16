@@ -40,17 +40,18 @@ class Allocator[F[_]: Sync] private (
   def withListener(listener: AllocationLifecycleListener[F]): Allocator[F] =
     new Allocator(dispatcher, shutdown, listener)
 
-  def allocate[A: ClassTag](resource: Resource[F, A]): A =
-    dispatcher.unsafeRunSync {
-      resource
-        .allocated
-        .flatMap { (acquired, release) =>
-          listener.onInit(acquired) *>
-            shutdown.update(listener.onShutdown(acquired) *> release *> _) *>
-            // Shutdown this resource, and after shutdown all previous
-            Sync[F].pure(acquired)
-        }
-    }
+  def allocate[A: ClassTag](resource: Resource[F, A]): A = {
+    val fa = resource
+      .allocated
+      .flatMap { (acquired, release) =>
+        listener.onInit(acquired) *>
+          // Prepend release of this resource into the overall shutdown sequence
+          shutdown.update(listener.onShutdown(acquired) *> release *> _) *>
+          Sync[F].pure(acquired)
+      }
+
+    dispatcher.unsafeRunSync(fa)
+  }
 
   def allocate[A: ClassTag](fa: F[A]): A = allocate(fa.toResource)
 

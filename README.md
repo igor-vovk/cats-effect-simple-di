@@ -5,7 +5,7 @@ This is a follow-up of
 the [article](https://medium.com/@ivovk/dependency-injection-with-cats-effect-resource-monad-ad7cd47b977) I wrote about
 the topic.
 
-Traditional approach to dependency injection with cats-effect is to build a single for-comprehension that wires all the
+The traditional approach to dependency injection with cats-effect is to build a single for-comprehension that wires all
 dependencies together. This approach is not very scalable and can become quite messy as the number of dependencies
 grows.
 
@@ -17,7 +17,7 @@ import io.github.cats_effect_simple_di.Allocator
 // create a Dependencies object and class that holds all the dependencies:
 object Dependencies {
   def create(): Resource[IO, Dependencies] =
-    Allocator.create().map(new Dependencies(_))
+    Allocator.create[IO]().map(new Dependencies(_))
 }
 
 class Dependencies private(allocator: Allocator[IO]) {
@@ -30,12 +30,18 @@ class Dependencies private(allocator: Allocator[IO]) {
   // Dependencies that don't need to be shut down can be used directly
   lazy val myClass: MyClass = new MyClass(http4sClient)
 
+  // It also supports dependencies that return an IO
+  lazy val myDependency: MyDependency = allocator.allocate {
+    IO(new MyDependency(http4sClient))
+  }
+
   // Dependencies will be shut down in the right order
   lazy val myServer: Server[IO] = allocator.allocate {
-    BlazeServerBuilder[IO](runtime.compute)
-      .bindHttp(8080, "localhost")
-      .withHttpApp(myClass.httpApp)
-      .resource
+    EmberServerBuilder.default[IO]
+      .withHost(host"0.0.0.0")
+      .withPort(port"8080")
+      .withHttpApp(myDependency.app)
+      .build
   }
 
 }
@@ -54,16 +60,18 @@ object Main extends IOApp.Simple {
 
 * `lazy val` solves the problem that dependencies are instantiated only when they are accessed and only one instance is
   created.
-* `Allocator` is a wrapper around `Resource` that keeps track of the order of resource allocation and finalization. So
-  when application is shut down, resources are shut down in the reverse order they were initialized.
-* `Dependencies` initialization is wrapped in a `Resource` so that resources are shut down when the application
-  finishes.
+* `Allocator` is a wrapper around `Resource` that keeps track of an order of resource allocation and finalization. So
+  when application is shut down, resources are shut down in the reverse to the order they were initialized.
+* `Dependencies` initialization is wrapped in a `Resource` so that resources are shut down automatically, when the
+  application finishes.
 
 ## Installation
 
+![Maven Central](https://img.shields.io/maven-central/v/io.github.igor-vovk/cats-effect-simple-di_3?style=flat-square&color=green)
+
 Supported Scala versions: `3.x`
 
-To install add the following to your `build.sbt`:
+To install, add the following to your `build.sbt`:
 
 ```scala
 libraryDependencies ++= Seq(

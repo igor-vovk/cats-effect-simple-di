@@ -11,35 +11,32 @@ ThisBuild / developers := List(
     "igor-vovk",
     "Ihor Vovk",
     "ideals-03.gushing@icloud.com",
-    url("https://ivovk.me")
+    url("https://ivovk.me"),
   )
 )
 ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 
 lazy val noPublish = List(
-  publish := {},
-  publishLocal := {},
+  publish         := {},
+  publishLocal    := {},
   publishArtifact := false,
-  publish / skip := true
+  publish / skip  := true,
 )
 
-lazy val core = (project in file("."))
+lazy val catsEffectSimpleDiCore = (project in file("."))
   .settings(
     moduleName := "cats-effect-simple-di",
-
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % "3.5.7" % "provided",
-
-      "org.typelevel" %% "log4cats-slf4j" % "2.7.0" % "provided",
+      "org.typelevel" %% "cats-effect"     % "3.5.7"  % "provided",
+      "org.typelevel" %% "log4cats-slf4j"  % "2.7.0"  % "provided",
       "ch.qos.logback" % "logback-classic" % "1.5.16" % "provided",
-
-      "org.scalatest" %% "scalatest" % "3.2.19" % Test,
-    )
+      "org.scalatest" %% "scalatest"       % "3.2.19" % Test,
+    ),
   )
 
 lazy val root = (project)
   .aggregate(
-    core
+    catsEffectSimpleDiCore
   )
   .settings(
     noPublish
