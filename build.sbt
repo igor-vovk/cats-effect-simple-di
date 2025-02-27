@@ -29,7 +29,7 @@ lazy val catsEffectSimpleDiCore = (project in file("."))
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect"     % "3.5.7"  % Provided,
       "org.typelevel" %% "log4cats-slf4j"  % "2.7.0"  % Provided,
-      "ch.qos.logback" % "logback-classic" % "1.5.16" % Provided,
+      "ch.qos.logback" % "logback-classic" % "1.5.17" % Provided,
       "org.scalatest" %% "scalatest"       % "3.2.19" % Test,
     ),
   )
