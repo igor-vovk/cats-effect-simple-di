@@ -61,7 +61,7 @@ object Main extends IOApp.Simple {
 * `lazy val` solves the problem that dependencies are instantiated only when they are accessed and only one instance is
   created.
 * `Allocator` is a wrapper around `Resource` that keeps track of an order of resource allocation and finalization. So
-  when application is shut down, resources are shut down in the reverse to the order they were initialized.
+  when application is shut down, resources are shut down in reverse to the order they were initialized.
 * `Dependencies` initialization is wrapped in a `Resource` so that resources are shut down automatically, when the
   application finishes.
 
