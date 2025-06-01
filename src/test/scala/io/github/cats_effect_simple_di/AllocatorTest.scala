@@ -39,7 +39,7 @@ class AllocatorTest extends AnyFlatSpec {
 
   "Allocator" should "allocate a resource" in new ctx {
     val testDependencies = TestDependencies(global)
-    val testResource = testDependencies.use { deps =>
+    val testResource     = testDependencies.use { deps =>
       IO.pure(deps.testResourceA)
     }.unsafeRunSync()
 
