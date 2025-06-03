@@ -1,5 +1,3 @@
-import xerial.sbt.Sonatype.sonatypeCentralHost
-
 ThisBuild / scalaVersion := "3.3.6"
 
 ThisBuild / organization := "io.github.igor-vovk"
@@ -14,7 +12,6 @@ ThisBuild / developers := List(
     url("https://ivovk.me"),
   )
 )
-ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 
 lazy val noPublish = List(
   publish         := {},
