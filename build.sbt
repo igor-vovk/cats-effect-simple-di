@@ -4,8 +4,8 @@ ThisBuild / scalaVersion := "3.3.6"
 
 ThisBuild / organization := "io.github.igor-vovk"
 
-ThisBuild / homepage := Some(url("https://github.com/igor-vovk/cats-effect-simple-di"))
-ThisBuild / licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+ThisBuild / homepage   := Some(url("https://github.com/igor-vovk/cats-effect-simple-di"))
+ThisBuild / licenses   := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
 ThisBuild / developers := List(
   Developer(
     "igor-vovk",

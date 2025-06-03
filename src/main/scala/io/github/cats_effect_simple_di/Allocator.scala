@@ -14,7 +14,7 @@ object Allocator {
     for
       dispatcher  <- Dispatcher.parallel[F]
       shutdownRef <- Ref.of(Async[F].unit).toResource
-      allocator <- {
+      allocator   <- {
         val acquire = Async[F].delay(Allocator(dispatcher, shutdownRef, NoOpListener[F]))
         val release = (a: Allocator[F]) => a.shutdownAll
 
