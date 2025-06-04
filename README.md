@@ -1,4 +1,4 @@
-# cedi [tsedi] – cats-effect dependency injection library
+# cedi [tsedi] – Cats-Effect Dependency Injection library
 
 A tiny library that makes dependency injection with [cats-effect](https://github.com/typelevel/cats-effect) simple.
 This is a follow-up of
