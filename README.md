@@ -1,9 +1,7 @@
 # cedi [tsedi] – Cats-Effect Dependency Injection library
 
 A tiny library that makes dependency injection with [cats-effect](https://github.com/typelevel/cats-effect) simple.
-This is a follow-up of
-the [article](https://medium.com/@ivovk/dependency-injection-with-cats-effect-resource-monad-ad7cd47b977) I wrote about
-the topic.
+This is a follow-up of an [article](https://medium.com/@ivovk/dependency-injection-with-cats-effect-resource-monad-ad7cd47b977) I wrote about the topic.
 
 The traditional approach to dependency injection with cats-effect is to build a single for-comprehension that wires all
 dependencies together. This approach is not very scalable and can become quite messy as the number of dependencies
@@ -12,7 +10,7 @@ grows.
 The suggested approach with this library would be:
 
 ```scala
-import io.github.cats_effect_simple_di.Allocator
+import me.ivovk.cedi.Allocator
 
 // create a Dependencies object and class that holds all the dependencies:
 object Dependencies {

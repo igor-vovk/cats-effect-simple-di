@@ -1,7 +1,7 @@
 package me.ivovk.cedi
 
 import cats.Applicative
-import cats.effect.{IO, Sync}
+import cats.effect.Sync
 
 import scala.reflect.ClassTag
 
