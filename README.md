@@ -67,7 +67,7 @@ object Main extends IOApp.Simple {
 
 ## Installation
 
-![Maven Central](https://img.shields.io/maven-central/v/io.github.igor-vovk/cats-effect-simple-di_3?style=flat-square&color=green)
+![Maven Central](https://img.shields.io/maven-central/v/me.ivovk/cedi_3?style=flat-square&color=green)
 
 Supported Scala versions: `3.x`
 
@@ -76,7 +76,7 @@ To install, add the following to your `build.sbt`:
 ```scala
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-effect" % Versions.catsEffect,
-  "io.github.igor-vovk" %% "cats-effect-simple-di" % Versions.simpleDi,
+  "me.ivovk" %% "cedi" % Versions.simpleDi,
 )
 ```
 

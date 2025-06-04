@@ -1,8 +1,8 @@
 ThisBuild / scalaVersion := "3.3.6"
 
-ThisBuild / organization := "io.github.igor-vovk"
+ThisBuild / organization := "me.ivovk"
 
-ThisBuild / homepage   := Some(url("https://github.com/igor-vovk/cats-effect-simple-di"))
+ThisBuild / homepage   := Some(url("https://github.com/igor-vovk/cedi"))
 ThisBuild / licenses   := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
 ThisBuild / developers := List(
   Developer(
@@ -20,9 +20,9 @@ lazy val noPublish = List(
   publish / skip  := true,
 )
 
-lazy val catsEffectSimpleDiCore = (project in file("."))
+lazy val cedi = (project in file("."))
   .settings(
-    moduleName := "cats-effect-simple-di",
+    moduleName := "cedi",
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect"    % "3.6.1",
       "org.typelevel" %% "log4cats-slf4j" % "2.7.1",
@@ -32,7 +32,7 @@ lazy val catsEffectSimpleDiCore = (project in file("."))
 
 lazy val root = (project)
   .aggregate(
-    catsEffectSimpleDiCore
+    cedi
   )
   .settings(
     noPublish

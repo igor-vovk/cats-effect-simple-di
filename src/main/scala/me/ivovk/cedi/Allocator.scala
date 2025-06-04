@@ -1,4 +1,4 @@
-package io.github.cats_effect_simple_di
+package me.ivovk.cedi
 
 import cats.effect.implicits.*
 import cats.effect.std.Dispatcher
