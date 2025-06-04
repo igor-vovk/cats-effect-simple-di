@@ -1,9 +1,9 @@
-package io.github.cats_effect_simple_di
+package me.ivovk.cedi
 
+import cats.effect.*
 import cats.effect.implicits.*
 import cats.effect.std.Dispatcher
 import cats.effect.unsafe.IORuntime
-import cats.effect.*
 import cats.implicits.*
 
 import scala.reflect.ClassTag

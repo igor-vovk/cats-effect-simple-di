@@ -1,9 +1,7 @@
 # cedi [tsedi] – Cats-Effect Dependency Injection library
 
 A tiny library that makes dependency injection with [cats-effect](https://github.com/typelevel/cats-effect) simple.
-This is a follow-up of
-the [article](https://medium.com/@ivovk/dependency-injection-with-cats-effect-resource-monad-ad7cd47b977) I wrote about
-the topic.
+This is a follow-up of an [article](https://medium.com/@ivovk/dependency-injection-with-cats-effect-resource-monad-ad7cd47b977) I wrote about the topic.
 
 The traditional approach to dependency injection with cats-effect is to build a single for-comprehension that wires all
 dependencies together. This approach is not very scalable and can become quite messy as the number of dependencies
@@ -12,7 +10,7 @@ grows.
 The suggested approach with this library would be:
 
 ```scala
-import io.github.cats_effect_simple_di.Allocator
+import me.ivovk.cedi.Allocator
 
 // create a Dependencies object and class that holds all the dependencies:
 object Dependencies {
@@ -67,7 +65,7 @@ object Main extends IOApp.Simple {
 
 ## Installation
 
-![Maven Central](https://img.shields.io/maven-central/v/io.github.igor-vovk/cats-effect-simple-di_3?style=flat-square&color=green)
+![Maven Central](https://img.shields.io/maven-central/v/me.ivovk/cedi_3?style=flat-square&color=green)
 
 Supported Scala versions: `3.x`
 
@@ -76,7 +74,7 @@ To install, add the following to your `build.sbt`:
 ```scala
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-effect" % Versions.catsEffect,
-  "io.github.igor-vovk" %% "cats-effect-simple-di" % Versions.simpleDi,
+  "me.ivovk" %% "cedi" % Versions.simpleDi,
 )
 ```
 
