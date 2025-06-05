@@ -17,7 +17,7 @@ class NoOpListener[F[_]: Applicative] extends AllocationLifecycleListener[F] {
   override def onShutdown[A: ClassTag](a: A): F[Unit] = Applicative[F].unit
 }
 
-class LogbackAllocationListener[F[_]: Sync] extends AllocationLifecycleListener[F] {
+class LoggingAllocationListener[F[_]: Sync] extends AllocationLifecycleListener[F] {
 
   import org.typelevel.log4cats.Logger
   import org.typelevel.log4cats.slf4j.Slf4jLogger

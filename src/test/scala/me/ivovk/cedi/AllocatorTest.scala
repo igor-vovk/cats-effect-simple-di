@@ -12,7 +12,7 @@ class AllocatorTest extends AnyFlatSpec {
     object TestDependencies {
       def apply(runtime: IORuntime): Resource[IO, TestDependencies] =
         Allocator.create[IO]()
-          .map(_.withListener(new LogbackAllocationListener[IO]))
+          .map(_.withListener(new LoggingAllocationListener[IO]))
           .map(new TestDependencies(_))
 
       val shutdownOrderCapturer: Ref[IO, Seq[String]] = Ref.unsafe(Seq.empty)
