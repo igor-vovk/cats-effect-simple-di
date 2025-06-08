@@ -1,3 +1,5 @@
+import org.typelevel.scalacoptions.ScalacOptions
+
 ThisBuild / scalaVersion := "3.3.6"
 
 ThisBuild / organization := "me.ivovk"
@@ -12,6 +14,12 @@ ThisBuild / developers := List(
     url("https://ivovk.me"),
   )
 )
+
+ThisBuild / tpolecatExcludeOptions ++= Set(
+  ScalacOptions.warnNonUnitStatement,
+  ScalacOptions.warnValueDiscard,
+)
+
 
 lazy val noPublish = List(
   publish         := {},
