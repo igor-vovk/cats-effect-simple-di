@@ -19,16 +19,16 @@ grows.
 
 The suggested approach with this library would be:
 
-1. Define a `Dependencies` object that holds all the dependencies.
+1. Define a `Dependencies` class that holds all the dependencies.
 2. Instantiate an `Allocator` and pass it to the `Dependencies` object. The `Allocator` is responsible for
    managing the lifecycle of resources and ensuring that they are shut down in the right order.
-3. Use the `allocate` method to instantiate dependencies that return a `Resource[F, A]`. This method will ensure
-   that the resource is properly managed and shut down when the application finishes.
-4. Use `lazy val` to ensure that dependencies are instantiated only when they are accessed and only once (if you need
-   to instantiate a dependency multiple times, just use `def` instead of `lazy val`).
+3. Use an `allocate` method to instantiate dependencies that return a `Resource[F, A]` or `F[A]`. This method will
+   ensure that the resource is properly managed and shut down when the application finishes.
+4. Use `lazy val` to ensure that dependencies are instantiated only once (if you need
+   to instantiate a dependency multiple times, just use `def` instead of `lazy val`) and only when they are accessed.
 5. Wrap the `Dependencies` object in a `Resource` so that resources are shut down automatically when the
    application finishes.
-6. Use the `Dependencies` object in your main application class, ensuring that all dependencies are available and
+6. Use the `Dependencies` object in your main class extending `IOApp`, ensuring that all dependencies are available and
    properly managed.
 
 Example usage:
