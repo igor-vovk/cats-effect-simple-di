@@ -73,20 +73,19 @@ To install, add the following to your `build.sbt`:
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-effect" % Versions.catsEffect,
-  "me.ivovk" %% "cedi" % Versions.simpleDi,
+  "me.ivovk" %% "cedi" % "{version}",
 )
 ```
 
 ## Debugging allocation order
 
-If you want to see the order of initialization and finalization of resources, use `LogbackAllocationListener` when
+If you want to see the order of initialization and finalization of resources, use `LoggingAllocationListener` when
 creating an `Allocator` object. This will log the allocation and finalization of resources in the order they happen:
 
 ```scala
-import io.github.cats_effect_simple_di.AllocationLifecycleListener
+import me.ivovk.cedi.{Allocator, LoggingAllocationListener}
 
-Allocator.create[IO]().withListener(new LogbackAllocationListener[IO])
+Allocator.create[IO]().withListener(new LoggingAllocationListener[IO])
 ```
 
 ## Modularization
