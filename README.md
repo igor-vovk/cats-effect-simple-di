@@ -108,7 +108,7 @@ Allocator.create[IO]().withListener(new LoggingAllocationListener[IO])
 
 You can have multiple dependencies objects and combine them together. In this case, you can either reuse the same
 `Allocator` object or create a new one for each dependency object, but wrap their instantiation
-in `allocator.allocate { ... }` so that they are shut down in the right order:
+in `allocate { ... }` so that they are shut down in the right order:
 
 Example reusing the same `Allocator` object:
 
@@ -129,7 +129,7 @@ object Dependencies {
 }
 
 class Dependencies(using AllocatorIO) {
-  val aws = new AwsDependencies(allocator)
+  val aws = new AwsDependencies
 
   lazy val http4sClient: Client[IO] = allocate {
     EmberClientBuilder.default[IO].build
@@ -168,11 +168,11 @@ object Dependencies {
 }
 
 class Dependencies(using AllocatorIO) {
-  lazy val aws = allocator.allocate {
+  lazy val aws = allocate {
     AwsDependencies.create()
   }
 
-  lazy val http4sClient: Client[IO] = http4sAllocator.allocate {
+  lazy val http4sClient: Client[IO] = allocate {
     EmberClientBuilder.default[IO].build
   }
 }

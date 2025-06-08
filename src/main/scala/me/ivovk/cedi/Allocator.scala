@@ -15,8 +15,10 @@ object Allocator {
       dispatcher  <- Dispatcher.parallel[F]
       shutdownRef <- Ref.of(Async[F].unit).toResource
       allocator   <- {
-        val acquire = Async[F].delay(new Allocator(dispatcher, shutdownRef, NoOpListener[F]))
-        val release = (a: Allocator[F]) => a.shutdownAll
+        val acquire: F[Allocator[F]] = Async[F].delay {
+          new Allocator(dispatcher, shutdownRef, NoOpListener[F])
+        }
+        val release: Allocator[F] => F[Unit] = _.shutdownAll
 
         Resource.make(acquire)(release)
       }
@@ -56,7 +58,8 @@ class Allocator[F[_]: Sync] private (
     dispatcher.unsafeRunSync(fa)
   }
 
-  def allocate[A: ClassTag](fa: F[A]): A = allocate(fa.toResource)
+  def allocate[A: ClassTag](fa: F[A]): A =
+    allocate(fa.toResource)
 
   def shutdownAll: F[Unit] =
     shutdown.getAndSet(Sync[F].unit).flatten

@@ -7,7 +7,8 @@ import scala.reflect.ClassTag
 object syntax {
 
   type Allocator[F[_]] = me.ivovk.cedi.Allocator[F]
-  type AllocatorIO     = me.ivovk.cedi.Allocator[IO]
+  val Allocator: me.ivovk.cedi.Allocator.type = me.ivovk.cedi.Allocator
+  type AllocatorIO = me.ivovk.cedi.Allocator[IO]
 
   def allocate[F[_]: Allocator, A: ClassTag](fa: F[A]): A =
     Allocator[F].allocate(fa)
