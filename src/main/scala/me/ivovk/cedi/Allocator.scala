@@ -15,7 +15,7 @@ object Allocator {
       dispatcher  <- Dispatcher.parallel[F]
       shutdownRef <- Ref.of(Async[F].unit).toResource
       allocator   <- {
-        val acquire = Async[F].delay(Allocator(dispatcher, shutdownRef, NoOpListener[F]))
+        val acquire = Async[F].delay(new Allocator(dispatcher, shutdownRef, NoOpListener[F]))
         val release = (a: Allocator[F]) => a.shutdownAll
 
         Resource.make(acquire)(release)
@@ -28,6 +28,9 @@ object Allocator {
    */
   def unsafeCreate(runtime: IORuntime): Allocator[IO] =
     create[IO]().allocated.unsafeRunSync()(runtime)._1
+
+  def apply[F[_]: Allocator]: Allocator[F] =
+    implicitly[Allocator[F]]
 
 }
 
