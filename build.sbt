@@ -20,7 +20,6 @@ ThisBuild / tpolecatExcludeOptions ++= Set(
   ScalacOptions.warnValueDiscard,
 )
 
-
 lazy val noPublish = List(
   publish         := {},
   publishLocal    := {},
